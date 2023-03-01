@@ -1,3 +1,10 @@
+const path = require("path");
+
+/**
+ * It better to run test separetly with only or comment out
+ * span=Dismiss for the pop up
+ */
+
 describe("register and login", () => {
   beforeEach("launch the application", async () => {
     await browser.url("/");
@@ -28,7 +35,10 @@ describe("register and login", () => {
   /**
    * Having problem with add product in the cart
    */
-  it.only("login and purchase", async () => {
+  /**
+   *  please span=Dismis should comment out for suite lelvel test
+   */
+  it("login and purchase", async () => {
     await browser.maximizeWindow();
     await $("span=Dismiss").click();
     const account = await $("i=account_circle");
@@ -99,7 +109,9 @@ describe("register and login", () => {
    */
 
   it("should upload a pic", async () => {
-    const filePath = "/path/pic/pic.jpg";
+    const input = $("//input[@id='picture']");
+    const submitBtn = $("button=Upload Picture");
+    const filePath = path.join(__dirname, "../data/pexels-pixabay-60597.jpg");
     const remoteFilePath = await browser.uploadFile(filePath);
     await browser.maximizeWindow();
     await $("span=Dismiss").click();
@@ -109,10 +121,10 @@ describe("register and login", () => {
     await $("#email").setValue("test12@gmail.com");
     await $("#password").setValue("Password#1");
     await $("#loginButton").click();
-    await $("#navbarAccount").click();
-    await $("span=test12@gmail.com").click();
-    await $("//input[@id='picture']").click();
-    await $("#file-upload").setValue(remoteFilePath);
-    await $("#file-submit").click();
+    await $("//i[contains(text(),'account_circle')]").click();
+    await $("//body/div[3]/div[2]/div[1]/div[1]/div[1]/button[1]/span[1]").click();
+    await input.setValue(remoteFilePath);
+    await submitBtn.click();
+    await browser.pause(2000);
   });
 });
